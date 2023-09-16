@@ -43,13 +43,13 @@ export default {
             :headers="headers"
             :items="items"
             class="elevation-1"
-		>
+        >
             <template v-slot:item="{ item }">
                 <tr>
                     <td class="text-xs-right">{{ item.columns.id }}</td>
                     <td>{{ item.columns.title }}</td>
                 </tr>
-			</template>
-		</v-data-table>
+            </template>
+        </v-data-table>
     `
 }
