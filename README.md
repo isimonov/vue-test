@@ -1,1 +1,5 @@
-# Test vue project with vuetify UI framework
+# Test Vue project
+Libraries used
+* Vue Router
+* Vuetify UI framework
+* Ky HTTP client
