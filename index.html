@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--<link href="https://unpkg.com/vuetify@3.3.3/dist/vuetify.min.css" rel="stylesheet">-->
+    <link href="https://unpkg.com/vuetify@3.3.16/dist/vuetify-labs.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.x/css/materialdesignicons.min.css" rel="stylesheet">
+    <script type="importmap">
+        {
+            "imports": {
+                //"vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.prod.js",
+                "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js",
+                //"vuetify": "https://unpkg.com/vuetify@3.3.3/dist/vuetify.esm.js",
+                "vuetify-labs": "https://unpkg.com/vuetify@3.3.16/dist/vuetify-labs.esm.js",
+                "vue-router": "https://unpkg.com/vue-router@4.2.4/dist/vue-router.esm-browser.js",
+                "@vue/devtools-api": "https://unpkg.com/@vue/devtools-api@6.5.0/lib/esm/index.js",
+                "ky": "https://www.unpkg.com/ky@1.0.1"
+            }
+        }
+    </script>
+	<style>
+		[v-cloak] { display: none; }
+	</style>
+    <title>Test</title>
+</head>
+<body>
+    <div id="app" v-cloak>
+        <v-app v-if="template">
+            <v-navigation-drawer v-model="drawer">
+                <v-list density="compact" nav>
+                    <v-list-item prepend-icon="mdi-view-dashboard" title="Home" value="home" to="/"></v-list-item>
+                    <v-list-item prepend-icon="mdi-forum" title="About" value="about" to="/about"></v-list-item>
+                    <v-list-item prepend-icon="mdi-help" title="Help" value="help" to="/help"></v-list-item>
+                    <v-list-item prepend-icon="mdi-login" title="Login" value="login" to="/login"></v-list-item>
+                </v-list>
+            </v-navigation-drawer>
+            <v-app-bar color="primary" absolute>
+                <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+                <v-app-bar-title>Test</v-app-bar-title>
+            </v-app-bar>
+            <v-main>
+                <v-container fluid>
+                    <v-breadcrumbs :items="breadcrumbs"></v-breadcrumbs>
+                    <router-view></router-view>
+                </v-container>
+            </v-main>
+        </v-app>
+        <v-app v-else>
+            <router-view></router-view>
+        </v-app>
+    </div>
+
+    <script type="module">
+        import { createApp, ref, watch } from 'vue'
+        //import { createVuetify } from 'vuetify'
+        import { createVuetify } from 'vuetify-labs'
+        import { createRouter, createWebHistory, createWebHashHistory, useRoute } from 'vue-router'
+        import ky from 'ky'
+
+        createApp({
+            setup() {
+                let template = ref(false);
+                let breadcrumbs = ref(['Main']);
+
+                const route = useRoute()
+                watch(route, value => {
+                    template.value = value.path !== '/login';
+                    breadcrumbs.value = [ breadcrumbs.value.shift() ].concat([(value.name ?? 'page').replace(/^./, str => str.toUpperCase())]);
+                });
+
+                let drawer = ref(JSON.parse(sessionStorage.getItem('app.drawer')) ?? false);
+                watch(drawer, value => sessionStorage.setItem('app.drawer', JSON.stringify(value)));
+
+                return {
+                    template,
+                    breadcrumbs,
+                    drawer,
+                };
+            },
+        })
+        .use(createVuetify())
+        .use(createRouter({
+            history: createWebHashHistory(),
+            routes: [
+                {
+                    path: '/',
+                    name: 'home',
+                    component: {
+                        template: String.raw`
+                            <p>
+                                Hello, World!
+                            </p>
+                        `
+                    }
+                },
+                {
+                    path: '/about',
+                    name: 'about',
+                    component: {
+                        template: String.raw`
+                            <p>
+                                Hello, About!
+                            </p>
+                        `
+                    }
+                },
+                {
+                    path: '/help',
+                    name: 'help',
+                    component: () => import('./pages/help.js')
+                },
+                {
+                    path: '/login',
+                    name: 'login',
+                    component: () => import('./pages/login.js')
+                }
+            ]
+        }))
+        .mount('#app')
+    </script>
+</body>
+</html>
