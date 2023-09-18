@@ -10,9 +10,6 @@ export default {
 
         return { message, login }
     },
-    methods: {
-
-    },
     template: String.raw`
         <v-main>
             <v-container fluid class="fill-height bg-surface-variant-">
