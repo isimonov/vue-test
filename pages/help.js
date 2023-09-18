@@ -4,7 +4,7 @@ import ky from 'ky'
 // lit-html plugin
 const html = String.raw;
 
-const json = await ky.get('/vue-test/data/test.json').json();
+const json = await ky.get('./data/test.json').json();
 console.log(json);
 
 export default {
