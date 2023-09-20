@@ -75,16 +75,9 @@ createApp({
                 `
             }
         },
-        {
-            path: '/help',
-            name: 'help',
-            component: () => import('./help.js')
-        },
-        {
-            path: '/login',
-            name: 'login',
-            component: () => import('./login.js')
-        }
+        { path: '/help', name: 'help', component: () => import('./help.js') },
+        { path: '/login', name: 'login', component: () => import('./login.js') },
+        { path: '/:catchAll(.*)', component: { template: '<h1>Page not found</h1>' } }
     ]
 }))
 .mount('#app')
