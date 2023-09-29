@@ -46,8 +46,8 @@ export default {
         >
             <template v-slot:item="{ item }">
                 <tr>
-                    <td class="text-xs-right">{{ item.columns.id }}</td>
-                    <td>{{ item.columns.title }}</td>
+                    <td class="text-xs-right">{{ item.id }}</td>
+                    <td>{{ item.title }}</td>
                 </tr>
             </template>
         </v-data-table>
