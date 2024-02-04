@@ -1,6 +1,5 @@
 import { createApp, ref, watch } from 'vue'
-//import { createVuetify } from 'vuetify'
-import { createVuetify } from 'vuetify-labs'
+import { createVuetify } from 'vuetify'
 import { createRouter, createWebHistory, createWebHashHistory, useRoute } from 'vue-router'
 
 createApp({
